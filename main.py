@@ -9,14 +9,12 @@ openai.api_type = "azure"
 openai.api_base = os.environ.get('API_BASE')
 openai.api_version = "2023-08-01-preview"
 openai.api_key = os.environ.get('API_KEY')
-#openai.api_key = "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"
 
 f = open('data.json')
 data = json.load(f)
 f.close()
 
-# Example dummy function hard coded to return the same weather
-# In production, this could be your backend API or an external API
+
 def get_cities_in_state(location):
     response = urlopen("https://www.hireacamp.com/api/external/ai/search?limit=10&params=%7B%22filter%22:[%22type=city%22,%22state="+location+"%22],%22sort%22:[%22_count:desc%22],%22attributesToRetrieve%22:%20[%22name%22,%22uname%22,%22price%22,%22state%22]%7D")
     cities = json.loads(response.read())
@@ -88,7 +86,6 @@ def run_conversation(message_history: list[Message]):
         # Step 2: check if GPT wanted to call a function
     if response_message.get("function_call"):
         # Step 3: call the function
-        # Note: the JSON response may not always be valid; be sure to handle errors
         available_functions = {
             "get_cities_in_state": get_cities_in_state,
             "top_stays": top_stays
